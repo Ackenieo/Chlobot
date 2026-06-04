@@ -5,7 +5,7 @@
 [![Java](https://img.shields.io/badge/Java-21-orange)]()
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.7-brightgreen)]()
 [![Spring AI](https://img.shields.io/badge/Spring%20AI-1.0.0-blue)]()
-[![License]([https://img.shields.io/badge/](http://www.apache.org/licenses/))]()
+[![License](https://img.shields.io/badge/License-Apache%202.0-red)]()
 
 ## Overview
 
