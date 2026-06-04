@@ -1,0 +1,15 @@
+spring:
+  ai:
+    openai:
+      api-key: ${DEEPSEEK_API_KEY:${AI_API_KEY:mock-api-key}}
+      audio:
+        speech:
+          api-key: ${DEEPSEEK_API_KEY:${AI_API_KEY:mock-api-key}}
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://mysql:3306/chlobot?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai}
+    username: ${MYSQL_USERNAME:chlobot}
+    password: ${MYSQL_PASSWORD:chlobot123}
+
+agent:
+  pgvector:
+    url: ${PGVECTOR_URL:jdbc:postgresql://postgres:5432/chlobot}

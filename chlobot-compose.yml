@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  # MySQL 数据库 (主数据源)
+  mysql:
+    image: mysql:8.0
+    container_name: chlobot-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-chlobot123}
+      MYSQL_DATABASE: chlobot
+      MYSQL_USER: ${MYSQL_USERNAME:-chlobot}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-chlobot123}
+      TZ: Asia/Shanghai
+    ports:
+      - "3362:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+8:00
+    networks:
+      - chlobot_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-chlobot123}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL 向量数据库 (PGVector)
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: chlobot-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${PGVECTOR_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${PGVECTOR_PASSWORD:-postgres123}
+      POSTGRES_DB: chlobot
+      TZ: Asia/Shanghai
+    ports:
+      - "5488:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - chlobot_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGVECTOR_USERNAME:-postgres} -d chlobot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot 应用
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chlobot
+    restart: on-failure
+    depends_on:
+      mysql:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./.secrets/.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8136:8080"
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - chlobot_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Sentinel 控制台（模型渠道限流/熔断/降级）
+  sentinel-dashboard:
+    image: bladex/sentinel-dashboard:1.8.8
+    container_name: chlobot-sentinel-dashboard
+    restart: unless-stopped
+    ports:
+      - "8914:8858"
+    networks:
+      - chlobot_network
+
+networks:
+  chlobot_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  postgres_data:
+    driver: local

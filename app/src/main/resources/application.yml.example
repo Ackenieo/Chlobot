@@ -1,0 +1,95 @@
+# ============================================================
+# Chlobot Application Configuration Example
+# ============================================================
+# Copy this file to application.yml and fill in your actual values.
+# Never commit real API keys or passwords to version control.
+# ============================================================
+
+server:
+  port: 8136
+  servlet:
+    context-path: /api
+
+# ============================================================
+# Spring AI & Model Configuration
+# ============================================================
+spring:
+  application:
+    name: chlobot
+  ai:
+    openai:
+      # DeepSeek API Key (or any OpenAI-compatible provider)
+      api-key: ${DEEPSEEK_API_KEY:${AI_API_KEY:your-api-key-here}}
+      audio:
+        speech:
+          api-key: ${DEEPSEEK_API_KEY:${AI_API_KEY:your-api-key-here}}
+      # DeepSeek API Base URL
+      base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+      chat:
+        options:
+          # Model name (e.g., deepseek-chat, deepseek-coder)
+          model: ${MODEL_NAME:deepseek-chat}
+  
+  # ============================================================
+  # MySQL Datasource (Business Data)
+  # ============================================================
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3362/chlobot?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai}
+    username: ${MYSQL_USERNAME:chlobot}
+    password: ${MYSQL_PASSWORD:your-mysql-password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# ============================================================
+# SpringDoc OpenAPI (Swagger)
+# ============================================================
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+# ============================================================
+# Actuator & Prometheus Metrics
+# ============================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    prometheus:
+      access: unrestricted
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+# ============================================================
+# Agent Configuration
+# ============================================================
+agent:
+  model:
+    # Model API Key
+    api-key: ${DEEPSEEK_API_KEY:${AI_API_KEY:your-api-key-here}}
+    # Model Base URL
+    base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+    # Model Name
+    name: ${MODEL_NAME:deepseek-chat}
+    # Provider (deepseek, openai, etc.)
+    provider: deepseek
+    # Enable mock fallback when API is not configured
+    mock-fallback: ${MODEL_MOCK_FALLBACK:true}
+    # Model request timeout (seconds)
+    timeout-seconds: ${MODEL_TIMEOUT_SECONDS:60}
+  
+  # ============================================================
+  # PostgreSQL pgvector (Vector Database for RAG)
+  # ============================================================
+  pgvector:
+    url: ${PGVECTOR_URL:jdbc:postgresql://localhost:5488/chlobot}
+    username: ${PGVECTOR_USERNAME:postgres}
+    password: ${PGVECTOR_PASSWORD:your-pgvector-password}

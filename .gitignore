@@ -1,0 +1,149 @@
+# ==================== IDEA ====================
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+out/
+
+# ==================== Maven ====================
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ==================== Gradle (如有使用) ====================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ==================== Eclipse ====================
+.classpath
+.project
+.settings/
+.bin/
+
+# ==================== VS Code ====================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ==================== Agent 规范/配置文件 ====================
+# Trae IDE 配置（部分忽略）
+.trae/rules/
+.trae/skills/
+!trae/config.yaml
+
+# Claude 配置（完全忽略）
+.claude/
+CLAUDE.md
+
+# Signed 文档（完全忽略）
+signed/
+
+# Script Home（完全忽略）
+script_home/
+
+# Skills（完全忽略）
+skills/
+
+# Codex（完全忽略）
+.codex/
+
+# ==================== 密钥和环境变量 ====================
+# 个人密钥文件（必须忽略）
+.env
+.env.local
+.env.*.local
+application-local.yaml
+application-local.properties
+*-secret.yaml
+*-secret.properties
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# 项目内部密钥目录中的敏感文件（保留目录结构和示例文件）
+.secrets/.env
+.secrets/*.env
+!secrets/.gitkeep
+!secrets/.env.example
+!secrets/
+
+# 密钥目录（外部存储）
+D:/WWWWokP/college_students_project/secrets/
+
+# 密钥清单文档（不忽略，用于指导配置）
+!SECRETS_CHECKLIST.md
+
+# ==================== 操作系统文件 ====================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+
+# ==================== 日志文件 ====================
+*.log
+logs/
+*.log.*
+
+# ==================== 临时文件 ====================
+*.tmp
+*.bak
+*.swp
+*~
+*.swo
+
+# ==================== 编译产物 ====================
+*.class
+*.jar
+*.war
+*.ear
+
+# ==================== Git 相关 ====================
+.git/
+.gitattributes
+
+# ==================== 测试报告 ====================
+test-results/
+test-output/
+surefire-reports/
+failsafe-reports/
+
+# ==================== 覆盖率报告 ====================
+coverage/
+jacoco/
+.nyc_output/
+
+# ==================== Node.js (如有前端模块) ====================
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ==================== 其他开发文档 ====================
+SETUP_COMPLETE.md
+QUICKSTART.md
+SECRETS_CHECKLIST.md

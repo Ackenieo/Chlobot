@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: chlobot
+  ai:
+    openai:
+      api-key: ${DEEPSEEK_API_KEY:${AI_API_KEY:mock-api-key}}
+      audio:
+        speech:
+          api-key: ${DEEPSEEK_API_KEY:${AI_API_KEY:mock-api-key}}
+      base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+      chat:
+        options:
+          model: ${MODEL_NAME:deepseek-chat}
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3362/chlobot?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai}
+    username: ${MYSQL_USERNAME:chlobot}
+    password: ${MYSQL_PASSWORD:chlobot123}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    prometheus:
+      access: unrestricted
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+agent:
+  model:
+    api-key: ${DEEPSEEK_API_KEY:${AI_API_KEY:}}
+    base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+    name: ${MODEL_NAME:deepseek-chat}
+    provider: deepseek
+    mock-fallback: ${MODEL_MOCK_FALLBACK:true}
+    timeout-seconds: ${MODEL_TIMEOUT_SECONDS:60}
+  pgvector:
+    url: ${PGVECTOR_URL:jdbc:postgresql://localhost:5488/chlobot}
+    username: ${PGVECTOR_USERNAME:postgres}
+    password: ${PGVECTOR_PASSWORD:postgres123}

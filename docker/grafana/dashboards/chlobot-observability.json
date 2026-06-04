@@ -1,0 +1,20 @@
+{
+  "title": "Chlobot Java Service Observability",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "tags": ["chlobot", "spring-boot", "java", "agent"],
+  "timezone": "browser",
+  "panels": [
+    {"title": "Service Health", "type": "stat", "targets": [{"expr": "up{job=\"chlobot\"}"}]},
+    {"title": "HTTP QPS", "type": "timeseries", "targets": [{"expr": "sum(rate(http_server_requests_seconds_count{application=\"chlobot\"}[1m]))"}]},
+    {"title": "HTTP Error Rate", "type": "timeseries", "targets": [{"expr": "sum(rate(http_server_requests_seconds_count{application=\"chlobot\",status=~\"5..\"}[1m]))"}]},
+    {"title": "P95 Latency", "type": "timeseries", "targets": [{"expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"chlobot\"}[5m])) by (le, uri))"}]},
+    {"title": "Agent Task Count", "type": "stat", "targets": [{"expr": "chlobot_agent_tasks_total"}]},
+    {"title": "Model Calls", "type": "timeseries", "targets": [{"expr": "sum(rate(chlobot_model_calls_total[1m])) by (channel, outcome)"}]},
+    {"title": "RAG Quality", "type": "stat", "targets": [{"expr": "chlobot_rag_empty_retrieval_rate"}, {"expr": "chlobot_rag_citation_coverage"}]},
+    {"title": "Tool Risk", "type": "bargauge", "targets": [{"expr": "sum(chlobot_tool_calls_total) by (permission_level, status)"}]},
+    {"title": "Memory Advisor", "type": "stat", "targets": [{"expr": "chlobot_memory_selected_total"}, {"expr": "chlobot_memory_dropped_total"}]},
+    {"title": "Context Budget", "type": "gauge", "targets": [{"expr": "chlobot_context_budget_used_tokens / chlobot_context_budget_total_tokens"}]}
+  ]
+}
